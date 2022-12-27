@@ -42,6 +42,7 @@ class ModsTab(ScrolledTabPage):
         self.list.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.on_selected)
 
         self.SetSizer(self.box)
+        self.on_update_mod_info(self)
 
     def on_toggled(self, e):
         pass

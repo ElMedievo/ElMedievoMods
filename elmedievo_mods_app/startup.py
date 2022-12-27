@@ -1,7 +1,9 @@
+import os
+import zipfile
 import io
 import json
-import zipfile
 
+from packaging import version
 from elmedievo_mods_app.common import *
 from elmedievo_mods_app.helpers import *
 
@@ -13,26 +15,43 @@ def prepare_folders():
 
 """ Retrieves all the ModPack files and creates them if they don't exist """
 def fetch_data():
-    # Download and unpack mods.zip
-    mods_file = "mods.zip"
-    mods_zip_url = f"{ELMEDIEVO_MODS_URL}/{mods_file}"
-    mods_target_dir = f"./mods/"
+    if mods_update_available():
+        # Download and unpack mods.zip
+        mods_file = "mods.zip"
+        mods_zip_url = f"{ELMEDIEVO_MODS_URL}/{mods_file}"
+        mods_target_dir = f"./mods/"
 
-    r = requests.get(mods_zip_url)
-    z = zipfile.ZipFile(io.BytesIO(r.content))
-    z.extractall(mods_target_dir)
+        r = requests.get(mods_zip_url)
+        z = zipfile.ZipFile(io.BytesIO(r.content))
+        z.extractall(mods_target_dir)
 
-    # Download and unpack mods_opt.zip
-    mods_opt_file = "mods_opt.zip"
-    mods_opt_zip_url = f"{ELMEDIEVO_MODS_URL}/{mods_opt_file}"
-    mods_opt_target_dir = f"./mods_opt/"
+        # Download and unpack mods_opt.zip
+        mods_opt_file = "mods_opt.zip"
+        mods_opt_zip_url = f"{ELMEDIEVO_MODS_URL}/{mods_opt_file}"
+        mods_opt_target_dir = f"./mods_opt/"
 
-    r = requests.get(mods_opt_zip_url)
-    z = zipfile.ZipFile(io.BytesIO(r.content))
-    z.extractall(mods_opt_target_dir)
+        r = requests.get(mods_opt_zip_url)
+        z = zipfile.ZipFile(io.BytesIO(r.content))
+        z.extractall(mods_opt_target_dir)
 
 
-""" Retrieves the data version string from its version folder. If not found, a new data version file is downloaded. """
+def mods_update_available():
+    r = requests.get(f"{ELMEDIEVO_MODS_URL}/modpack.json")
+
+    if r.status_code != 200:
+        print(f"Unable to retrieve ModPack update. Error {r.status_code}.")
+        return False
+
+    v = r.json()["version"]
+    if version.parse(v) > version.parse(get_modpack_version()):
+        print(f"New ModPack version detected: {v}")
+        return True
+    else:
+        print(f"ModPack is up to date.")
+        return False
+
+
+""" Retrieves the ModPack version string from its version file. If not found, a new modpack version file is downloaded. """
 def get_modpack_version():
     data_version_file_path = os.path.join(os.getcwd(), "modpack.json")
     if not os.path.isfile(data_version_file_path):
