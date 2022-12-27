@@ -22,7 +22,7 @@ message_event = threading.Event()
 message_event.clear()
 
 session = requests.Session()
-
+item = 0
 
 if sys.platform == "linux":
     PLATFORM = "linux"
