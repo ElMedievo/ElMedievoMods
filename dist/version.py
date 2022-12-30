@@ -43,7 +43,7 @@ VSVersionInfo(
       [
       StringTable(
         u'040904e4', [
-        StringStruct(u'FileDescription', u'Re-Volt America Points Calculator'),
+        StringStruct(u'FileDescription', u'ElMedievo ModPack Installer'),
         StringStruct(u'FileVersion', u'{v.public}'),
         StringStruct(u'InternalName', u'ElMedievo Mods'),
         StringStruct(u'LegalCopyright', u'Copyright (C) BGM 2022'),
