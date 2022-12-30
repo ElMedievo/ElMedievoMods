@@ -65,6 +65,9 @@ class ModsTab(ScrolledTabPage):
             else:
                 shutil.copy(f"mods_opt/{m['name']}", f"{MINECRAFT_DIR}/mods/{m['name']}")
 
+        wx.MessageBox(f"The ModPack was successfully installed", "Info",
+                      wx.OK | wx.ICON_INFORMATION)
+
     # §TODO: Most of this information is being hardcoded and not checked at all, but for simplicity's sake it's fine.
     #       Although, eventually we'll have to figure out a way to make each field useful and actually meaningful.
     def refresh_mods(self):
