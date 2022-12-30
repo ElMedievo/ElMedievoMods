@@ -45,6 +45,7 @@ def mods_update_available():
     v = r.json()["version"]
     if version.parse(v) > version.parse(get_modpack_version()):
         print(f"New ModPack version detected: {v}")
+        create_file("modpack.json", r.text)
         return True
     else:
         print(f"ModPack is up to date.")
