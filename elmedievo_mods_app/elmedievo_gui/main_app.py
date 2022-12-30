@@ -77,8 +77,8 @@ class FrameMain(wx.Frame):
 def main():
     app = wx.App()
 
-    load_mods()
     prepare_folders()
+    load_mods()
     fetch_data()
 
     app.SetAppName(APP_NAME)
