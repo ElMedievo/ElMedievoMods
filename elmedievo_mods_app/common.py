@@ -3,6 +3,8 @@ import sys
 import platform
 import requests
 
+from appdirs import *
+
 # GUI Constants
 
 APP_NAME = "elmedievoapp"
@@ -14,18 +16,26 @@ APP_SIZE = (960, 640)
 ELMEDIEVO_MODS_URL = "https://distribute.elmedievo.org/mods"
 CONFIG_DIR = os.curdir
 
-session = requests.Session()
-mods = {}
+# FIXME: Check for multi-platform support
+#       https://pypi.org/project/appdirs/
 
+session = requests.Session()
+mods = {} # TODO: Make this persistent
+
+# FIXME: Only Windows path is known to be correct. Check the others
 if sys.platform == "linux":
     PLATFORM = "linux"
+    MINECRAFT_DIR = f"{user_data_dir(roaming=True)}/.minecraft"
 elif sys.platform == "win32":
     if platform.architecture()[0] == "64bit":
         PLATFORM = "win64"
     else:
         PLATFORM = "win32"
+
+    MINECRAFT_DIR = f"{user_data_dir(roaming=True)}\.minecraft"
 elif sys.platform == "darwin":
     PLATFORM = "macos"
+    MINECRAFT_DIR = f"{user_data_dir(roaming=True)}/.minecraft"
 
 
 """ Returns whether application is run from a frozen bundle """

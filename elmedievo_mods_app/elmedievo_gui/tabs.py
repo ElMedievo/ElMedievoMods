@@ -1,4 +1,6 @@
 import os
+import glob
+import shutil
 
 from elmedievo_mods_app import CONFIG_DIR
 from elmedievo_mods_app.elmedievo_gui.widgets import *
@@ -22,12 +24,6 @@ class ModsTab(ScrolledTabPage):
         self.list.Bind(EVT_LIST_ITEM_CHECKED, self.on_toggled)
         self.list.Bind(EVT_LIST_ITEM_UNCHECKED, self.on_toggled)
 
-        # Main toolbar
-        self.box_toolbar = wx.BoxSizer(wx.HORIZONTAL)
-        self.button_update_info = wx.Button(self, -1, "Update Mod Info")
-        self.button_update_info.Bind(wx.EVT_BUTTON, self.refresh_mods)
-        self.box_toolbar.Add(self.button_update_info, 1, wx.EXPAND | wx.ALL, 5)
-
         # Controls toolbar
         self.box_controls = wx.BoxSizer(wx.HORIZONTAL)
         self.mods_install_button = wx.Button(self, label="Install")
@@ -35,7 +31,6 @@ class ModsTab(ScrolledTabPage):
 
         self.box_controls.Add(self.mods_install_button, 1, wx.EXPAND | wx.ALL, 5)
 
-        self.box.Add(self.box_toolbar, 0, wx.EXPAND)
         self.box.Add(self.list, 1, wx.EXPAND)
         self.box.Add(self.box_controls, 0, wx.EXPAND)
 
@@ -55,9 +50,22 @@ class ModsTab(ScrolledTabPage):
         self.refresh_mods()
 
     def on_mods_install(self, e):
-        pass
+        files = glob.glob(f"{MINECRAFT_DIR}/mods/*")
+        for f in files:
+            os.remove(f)
 
-    # §TODO: Most of this information is being hardcoded and not checked at all, which for simplicity's sake it's fine.
+        for mod in mods:
+            m = mods[mod]
+
+            if not m["checked"]:
+                continue
+
+            if m["required"]:
+                shutil.copy(f"mods/{m['name']}", f"{MINECRAFT_DIR}/mods/{m['name']}")
+            else:
+                shutil.copy(f"mods_opt/{m['name']}", f"{MINECRAFT_DIR}/mods/{m['name']}")
+
+    # §TODO: Most of this information is being hardcoded and not checked at all, but for simplicity's sake it's fine.
     #       Although, eventually we'll have to figure out a way to make each field useful and actually meaningful.
     def refresh_mods(self):
         pos = self.list.get_scroll_pos()
