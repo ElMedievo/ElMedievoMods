@@ -2,7 +2,6 @@ import os
 import sys
 import platform
 import requests
-import threading
 
 # GUI Constants
 
@@ -15,14 +14,8 @@ APP_SIZE = (960, 640)
 ELMEDIEVO_MODS_URL = "https://distribute.elmedievo.org/mods"
 CONFIG_DIR = os.curdir
 
-close_event = threading.Event()
-close_event.clear()
-
-message_event = threading.Event()
-message_event.clear()
-
 session = requests.Session()
-item = 0
+mods = {}
 
 if sys.platform == "linux":
     PLATFORM = "linux"

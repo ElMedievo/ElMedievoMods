@@ -62,3 +62,32 @@ def get_modpack_version():
         data_version_json = json.load(f)
 
     return data_version_json["version"]
+
+
+# FIXME: This was made in a rush! We need a better way of checking for some of these things...
+def load_mods():
+    item = 0
+
+    # Everything in 'mods/' is required and checked by default
+    for f in os.listdir(os.path.join(CONFIG_DIR, "mods")):
+        mod = {
+            "item": item,
+            "name": f,
+            "required": True,
+            "checked": True
+        }
+
+        mods[f] = mod
+        item += 1
+
+    # Everything in 'mods_opt/' is NOT required and NOT checked by default
+    for f in os.listdir(os.path.join(CONFIG_DIR, "mods_opt")):
+        mod = {
+            "item": item,
+            "name": f,
+            "required": False,
+            "checked": True
+        }
+
+        mods[f] = mod
+        item += 1

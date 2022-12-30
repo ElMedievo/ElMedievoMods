@@ -4,7 +4,7 @@ import wx
 import webbrowser
 
 from elmedievo_mods_app.common import *
-from elmedievo_mods_app.startup import prepare_folders
+from elmedievo_mods_app.startup import prepare_folders, load_mods
 from elmedievo_mods_app.startup import fetch_data
 from elmedievo_mods_app.elmedievo_gui.tabs import ModsTab
 from elmedievo_mods_app.elmedievo_gui.widgets import TabBar
@@ -77,6 +77,7 @@ class FrameMain(wx.Frame):
 def main():
     app = wx.App()
 
+    load_mods()
     prepare_folders()
     fetch_data()
 

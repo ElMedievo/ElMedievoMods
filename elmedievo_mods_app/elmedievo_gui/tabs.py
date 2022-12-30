@@ -2,7 +2,7 @@ import os
 
 from elmedievo_mods_app import CONFIG_DIR
 from elmedievo_mods_app.elmedievo_gui.widgets import *
-
+from elmedievo_mods_app.common import *
 
 class ModsTab(ScrolledTabPage):
     def __init__(self, parent):
@@ -47,33 +47,28 @@ class ModsTab(ScrolledTabPage):
         self.refresh_mods()
 
     def on_toggled(self, e):
+        mod = self.list.GetItemText(e.item)
+
+        if not mods[mod]["required"]:
+            mods[mod]["checked"] = e.value
+
         self.refresh_mods()
 
     def on_mods_install(self, e):
         pass
 
+    # §TODO: Most of this information is being hardcoded and not checked at all, which for simplicity's sake it's fine.
+    #       Although, eventually we'll have to figure out a way to make each field useful and actually meaningful.
     def refresh_mods(self):
         pos = self.list.get_scroll_pos()
         self.list.DeleteAllItems()
 
-        item = 0
-        for f in os.listdir(os.path.join(CONFIG_DIR, "mods")):
-            self.list.InsertItem(item, f)
-            self.list.SetItem(item, 1, "Installed")
-            self.list.SetItem(item, 2, "Yes")
-
-            # Everything in 'mods/' is required
-            self.list.CheckItem(item, check=True, event=False)
-            item += 1
-
-        for f in os.listdir(os.path.join(CONFIG_DIR, "mods_opt")):
-            self.list.InsertItem(item, f)
-            self.list.SetItem(item, 1, "Installed")
-            self.list.SetItem(item, 2, "Yes")
-
-            # Everything in 'mods_opt/' is NOT required
-            self.list.CheckItem(item, check=False, event=False)
-            item += 1
+        for mod in mods:
+            m = mods[mod]
+            self.list.InsertItem(m["item"], m["name"])
+            self.list.SetItem(m["item"], 1, "Available")
+            self.list.SetItem(m["item"], 2, str(m["required"]))
+            self.list.CheckItem(m["item"], check=m["checked"], event=False)
 
         self.Layout()
         self.list.set_column_widths()
