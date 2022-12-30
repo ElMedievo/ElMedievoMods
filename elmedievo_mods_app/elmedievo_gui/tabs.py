@@ -76,8 +76,10 @@ class ModsTab(ScrolledTabPage):
 
         self.on_selected(None)
 
+    # FIXME: Implement? Maybe open the mod's local folder in finder? idk
     def on_double_click(self, e):
         pass
 
+    # FIXME: Implement? Can't really think of a use
     def on_selected(self, e):
         pass
