@@ -2,6 +2,7 @@ import os
 import zipfile
 import io
 import json
+import wx
 
 from packaging import version
 from elmedievo_mods_app.common import *
@@ -16,6 +17,10 @@ def prepare_folders():
 """ Retrieves all the ModPack files and creates them if they don't exist """
 def fetch_data():
     if mods_update_available():
+        wx.MessageBox(f"Downloading mods. This may take a while...\n"
+                      f"The app will automatically launch as soon as it finishes downloading.", "Info",
+                      wx.OK | wx.ICON_INFORMATION)
+
         # Download and unpack mods.zip
         mods_file = "mods.zip"
         mods_zip_url = f"{ELMEDIEVO_MODS_URL}/{mods_file}"
