@@ -1,5 +1,8 @@
 ElMedievoMods
 ---
+
+:warning: All of this code is highly experimental, not production ready at all and may break with ease. :warning:
+
 ElMedievoMods is a desktop application designed to manage, install and update the
 [ModPack](https://github.com/ElMedievo/ModPack) required to play on ElMedievo.
 
